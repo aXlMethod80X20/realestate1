@@ -25,7 +25,7 @@ from bs4 import BeautifulSoup
 # ============================================================
 # CONFIGURATION
 # ============================================================
-GOOGLE_PLACES_API_KEY = ""  # Optional: Add your Google Places API key
+GOOGLE_PLACES_API_KEY = "AIzaSyDvArYp_vZJpYUvJuLczDZPLZ8hQVcXz-k"  # Google Places API key
 PROFF_API_KEY = ""          # Optional: Add your Proff.no API key
 
 # Regions in Norway (for filtering)
@@ -497,8 +497,11 @@ class HotelScraperApp:
                 google_data = self.lookup_google_places(legal_name, address)
                 if google_data:
                     hotel['commercial_name'] = google_data.get('name', '')
+                    hotel['address'] = google_data.get('formatted_address', '')
                     hotel['google_rating'] = google_data.get('rating', '')
                     hotel['stars'] = self.rating_to_stars(google_data.get('rating', 0))
+                    hotel['phone'] = google_data.get('formatted_phone_number', '')
+                    hotel['website'] = google_data.get('website', '')
                     sources.append('Google')
 
             # Proff.no for ownership
@@ -547,7 +550,7 @@ class HotelScraperApp:
             params = {
                 'input': query,
                 'inputtype': 'textquery',
-                'fields': 'name,rating,formatted_address',
+                'fields': 'name,rating,formatted_address,formatted_phone_number,website',
                 'key': GOOGLE_PLACES_API_KEY
             }
 
